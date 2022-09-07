@@ -28,8 +28,6 @@ type PropsType = {
     demo?: boolean
 }
 
-
-
 function App({demo = false}: PropsType) {
     const [mode, setMode] = useState<PaletteMode>('light');
     const colorMode = React.useMemo(
@@ -68,12 +66,9 @@ function App({demo = false}: PropsType) {
                 <div className="App">
                     <AppBar position="static">
                         <Toolbar style={{justifyContent: "space-between"}}>
-                            <IconButton edge="start" color="inherit" aria-label="menu">
-                                <Menu/>
-                            </IconButton>
                             <MaterialUISwitch   onChange={(e) => colorMode.toggleColorMode()}/>
                             <Typography variant="h6">
-                                Todolists
+                                To do Lists
                             </Typography>
                             {isLoggedIn &&
                                 <Button onClick={logoutHandler} color="inherit" variant={"outlined"}>Log out</Button>}

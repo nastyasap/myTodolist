@@ -54,11 +54,11 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
-    return <div>
+    return <div style={{width: 'fit-content', textAlign: 'center'}}>
         <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}
                           disabled={props.entityStatus === 'loading'}/>
             <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist}>
-                <Delete/>
+                <Delete color={'primary'}/>
             </IconButton>
         </h3>
         <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'}/>
@@ -71,19 +71,25 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
                 />)
             }
         </div>
-        <div style={{paddingTop: '10px'}}>
-            <Button variant={props.filter === 'all' ? 'outlined' : 'text'}
-                    onClick={onAllClickHandler}
-                    color={'inherit'}
-            >All
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+
+            <Button
+                size={'small'}
+                variant={'contained'}
+                color={props.filter === 'all' ? 'secondary' : 'primary'}
+                onClick={onAllClickHandler}>All
             </Button>
-            <Button variant={props.filter === 'active' ? 'outlined' : 'text'}
-                    onClick={onActiveClickHandler}
-                    color={'primary'}>Active
+            <Button
+                size={'small'}
+                variant={'contained'}
+                color={props.filter === 'active' ? 'secondary' : 'primary'}
+                onClick={onActiveClickHandler}>Active
             </Button>
-            <Button variant={props.filter === 'completed' ? 'outlined' : 'text'}
-                    onClick={onCompletedClickHandler}
-                    color={'secondary'}>Completed
+            <Button
+                size={'small'}
+                variant={'contained'}
+                color={props.filter === 'completed' ? 'secondary' : 'primary'}
+                onClick={onCompletedClickHandler}>Completed
             </Button>
         </div>
     </div>

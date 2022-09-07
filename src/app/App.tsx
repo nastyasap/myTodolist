@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import AppBar from '@mui/material/AppBar';
@@ -15,17 +15,35 @@ import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from "../features/login/Login";
 import {useDispatch} from "react-redux";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, PaletteMode, ThemeProvider} from "@mui/material";
 import {logoutTC} from "../features/login/auth-reducer";
 import {selectIsInitialized, selectStatus} from './selectors';
 import {authSelectors} from "../features/login";
+import {createTheme} from "@material-ui/core/styles";
+import { getDesignTokens } from '../utils/theme';
+import { MaterialUISwitch } from '../utils/switchMode';
 
 
 type PropsType = {
     demo?: boolean
 }
 
+
+
 function App({demo = false}: PropsType) {
+    const [mode, setMode] = useState<PaletteMode>('light');
+    const colorMode = React.useMemo(
+        () => ({
+            toggleColorMode: () => {
+                setMode((prevMode: PaletteMode) =>
+                    prevMode === 'light' ? 'dark' : 'light',
+                );
+            },
+        }),
+        [],
+    );
+    const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
     const status = useAppSelector<RequestStatusType>(selectStatus)
     const isInitialized = useAppSelector<boolean>(selectIsInitialized)
     const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
@@ -46,29 +64,33 @@ function App({demo = false}: PropsType) {
         </div>
     }
     return (
-        <div className="App">
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        News
-                    </Typography>
-                    {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Log out</Button>}
-                </Toolbar>
-            </AppBar>
-            {status === 'loading' && <LinearProgress color="secondary"/>}
-            <Container fixed>
-                <Routes>
-                    <Route path={'/'} element={<TodolistsList demo={demo}/>}/>
-                    <Route path={'/login'} element={<Login/>}/>
-                    <Route path={'/404'} element={<h1 style={{textAlign: 'center'}}>404: NOT FOUND</h1>}/>
-                    <Route path={'*'} element={<Navigate to={'/404'}/>}/>
-                </Routes>
-            </Container>
-            <ErrorSnackbar/>
-        </div>
+            <ThemeProvider theme={theme}>
+                <div className="App">
+                    <AppBar position="static">
+                        <Toolbar style={{justifyContent: "space-between"}}>
+                            <IconButton edge="start" color="inherit" aria-label="menu">
+                                <Menu/>
+                            </IconButton>
+                            <MaterialUISwitch   onChange={(e) => colorMode.toggleColorMode()}/>
+                            <Typography variant="h6">
+                                Todolists
+                            </Typography>
+                            {isLoggedIn &&
+                                <Button onClick={logoutHandler} color="inherit" variant={"outlined"}>Log out</Button>}
+                        </Toolbar>
+                    </AppBar>
+                    {status === 'loading' && <LinearProgress color="secondary"/>}
+                    <Container fixed>
+                        <Routes>
+                            <Route path={'/'} element={<TodolistsList demo={demo}/>}/>
+                            <Route path={'/login'} element={<Login/>}/>
+                            <Route path={'/404'} element={<h1 style={{textAlign: 'center'}}>404: NOT FOUND</h1>}/>
+                            <Route path={'*'} element={<Navigate to={'/404'}/>}/>
+                        </Routes>
+                    </Container>
+                    <ErrorSnackbar/>
+                </div>
+            </ThemeProvider>
     )
 }
 

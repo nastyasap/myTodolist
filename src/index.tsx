@@ -10,27 +10,27 @@ import {CssBaseline} from "@material-ui/core";
 import {createTheme, ThemeProvider} from "@material-ui/core/styles";
 
 const theme = createTheme({
-        palette: {
-            primary: {
-                main: '#7c4dff',
-            },
-            secondary: {
-                main: '#00bfa5',
-            },
-            type: 'dark'
-        },
+        // palette: {
+        //     primary: {
+        //         main: '#7c4dff',
+        //     },
+        //     secondary: {
+        //         main: '#00bfa5',
+        //     },
+        //     type: 'dark'
+        // },
     }
 )
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
-        <HashRouter>
+    <HashRouter>
+        <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Provider store={store}>
                 <App/>
             </Provider>
-        </HashRouter>
-    </ThemeProvider>,
+        </ThemeProvider>
+    </HashRouter>,
     document.getElementById('root')
 )
 ;

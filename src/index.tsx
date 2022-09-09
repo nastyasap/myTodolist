@@ -9,27 +9,11 @@ import {HashRouter} from "react-router-dom";
 import {CssBaseline} from "@material-ui/core";
 import {createTheme, ThemeProvider} from "@material-ui/core/styles";
 
-const theme = createTheme({
-        // palette: {
-        //     primary: {
-        //         main: '#7c4dff',
-        //     },
-        //     secondary: {
-        //         main: '#00bfa5',
-        //     },
-        //     type: 'dark'
-        // },
-    }
-)
-
 ReactDOM.render(
     <HashRouter>
-        {/*<ThemeProvider theme={theme}>*/}
-        {/*    <CssBaseline/>*/}
         <Provider store={store}>
             <App/>
         </Provider>
-        {/*</ThemeProvider>*/}
     </HashRouter>,
     document.getElementById('root')
 )

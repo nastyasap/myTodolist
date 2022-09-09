@@ -87,8 +87,8 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         return <Navigate to={'/login'}/>
     }
     return <>
-        <Grid container style={{padding: '20px'}}>
-            <AddItemForm addItem={addTodolist}/>
+        <Grid container style={{paddingTop: '20px', display: 'flex', flexDirection: 'column'}}>
+            <AddItemForm addItem={addTodolist} placeholder={'Add new To do List'}/>
         </Grid>
         <Grid container spacing={3}>
             {

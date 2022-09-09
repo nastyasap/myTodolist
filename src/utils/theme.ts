@@ -20,14 +20,13 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 primary: deepOrange,
                 divider: deepOrange[700],
                 background: {
-                    default: brown[800],
+                    default: brown[500],
                     paper: brown[900],
                 },
                 text: {
                     primary: '#fff',
                     secondary: grey[500],
                 },
-                mode: 'dark'
             }),
     },
 });

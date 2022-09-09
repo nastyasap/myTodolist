@@ -61,18 +61,18 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
                 <Delete color={'primary'}/>
             </IconButton>
         </h3>
-        <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'}/>
+        <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'} placeholder={'Title'}/>
         <div>
-            {
+            {tasksForTodolist.length ?
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
                                                 removeTask={props.removeTask}
                                                 changeTaskTitle={props.changeTaskTitle}
                                                 changeTaskStatus={props.changeTaskStatus}
                 />)
+                : <p style={{margin: '10px'}}>No tasks</p>
             }
         </div>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
             <Button
                 size={'small'}
                 variant={'contained'}

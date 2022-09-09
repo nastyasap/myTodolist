@@ -24,12 +24,12 @@ const theme = createTheme({
 
 ReactDOM.render(
     <HashRouter>
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Provider store={store}>
-                <App/>
-            </Provider>
-        </ThemeProvider>
+        {/*<ThemeProvider theme={theme}>*/}
+        {/*    <CssBaseline/>*/}
+        <Provider store={store}>
+            <App/>
+        </Provider>
+        {/*</ThemeProvider>*/}
     </HashRouter>,
     document.getElementById('root')
 )

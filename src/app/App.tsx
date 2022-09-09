@@ -3,11 +3,9 @@ import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import {Menu} from '@mui/icons-material';
 import LinearProgress from "@mui/material/LinearProgress";
 import {useAppSelector} from "./store";
 import {initializeAppTC, RequestStatusType} from "./app-reducer";
@@ -20,8 +18,9 @@ import {logoutTC} from "../features/login/auth-reducer";
 import {selectIsInitialized, selectStatus} from './selectors';
 import {authSelectors} from "../features/login";
 import {createTheme} from "@material-ui/core/styles";
-import { getDesignTokens } from '../utils/theme';
-import { MaterialUISwitch } from '../utils/switchMode';
+import {getDesignTokens} from '../utils/theme';
+import {MaterialUISwitch} from '../utils/switchMode';
+import {CssBaseline} from "@material-ui/core";
 
 
 type PropsType = {
@@ -63,6 +62,7 @@ function App({demo = false}: PropsType) {
     }
     return (
             <ThemeProvider theme={theme}>
+                <CssBaseline/>
                 <div className="App">
                     <AppBar position="static">
                         <Toolbar style={{justifyContent: "space-between"}}>

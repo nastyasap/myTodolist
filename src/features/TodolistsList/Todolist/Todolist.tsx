@@ -40,10 +40,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         props.changeTodolistTitle(props.id, title)
     }, [props.id, props.changeTodolistTitle])
 
-    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.id), [props.id, props.changeFilter])
-    const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.id), [props.id, props.changeFilter])
-    const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.id), [props.id, props.changeFilter])
-
+    const onButtonFilterClickHandler = useCallback((buttonFilter: FilterValuesType) => props.changeFilter(buttonFilter, props.id), [props.id, props.changeFilter])
 
     let tasksForTodolist = props.tasks
 
@@ -52,6 +49,15 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
     }
     if (props.filter === 'completed') {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.Completed)
+    }
+
+    const renderFilterButton = (buttonFilter: FilterValuesType, title: string) => {
+        return <Button
+            size={'small'}
+            variant={'contained'}
+            color={props.filter === buttonFilter ? 'secondary' : 'primary'}
+            onClick={() => onButtonFilterClickHandler(buttonFilter)}>{title}
+        </Button>
     }
 
     return <div style={{width: 'fit-content', textAlign: 'center'}}>
@@ -73,26 +79,14 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
             }
         </div>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-                size={'small'}
-                variant={'contained'}
-                color={props.filter === 'all' ? 'secondary' : 'primary'}
-                onClick={onAllClickHandler}>All
-            </Button>
-            <Button
-                size={'small'}
-                variant={'contained'}
-                color={props.filter === 'active' ? 'secondary' : 'primary'}
-                onClick={onActiveClickHandler}>Active
-            </Button>
-            <Button
-                size={'small'}
-                variant={'contained'}
-                color={props.filter === 'completed' ? 'secondary' : 'primary'}
-                onClick={onCompletedClickHandler}>Completed
-            </Button>
+            {renderFilterButton('all', 'All')}
+            {renderFilterButton('active', 'Active')}
+            {renderFilterButton('completed', 'Completed')}
         </div>
     </div>
 })
+
+
+
 
 

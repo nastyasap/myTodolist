@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback, useEffect, useState, DragEvent} from 'react'
 import {useDispatch} from 'react-redux'
 import {
     addTodolistTC,
@@ -13,9 +13,7 @@ import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from './Todolist/
 import {TaskStatuses} from '../../api/todolists-api'
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
-
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import {useAppSelector} from "../../app/store";
 import {Navigate} from "react-router-dom";
 import {authSelectors} from "../login";
@@ -82,6 +80,41 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(thunk)
     }, [dispatch])
 
+    const [currentCard, setCurrentCard] = useState<null | TodolistDomainType>(null)
+    const [cardList, setCardList] = useState<Array<TodolistDomainType>>(todolists)
+
+    const dragStartHandler = (e: DragEvent<HTMLDivElement>, card: TodolistDomainType) => {
+        console.log('drag', card)
+        setCurrentCard(card)
+    }
+    const dragEndHandler = (e: DragEvent<HTMLDivElement>) => {
+        e.currentTarget.style.background = 'white'
+    }
+    const dragOverHandler = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.currentTarget.style.background = 'lightgrey'
+    }
+    const dropHandler = (e: DragEvent<HTMLDivElement>, card: TodolistDomainType) => {
+        console.log('drop', card)
+        e.preventDefault()
+        setCardList(cardList.map(c => {
+            if(c.id === card.id) {
+                // @ts-ignore
+                return {...c, order: currentCard.order}
+            }
+            // @ts-ignore
+            if(c.id === currentCard.id) {
+                return {...c, order: card.order}
+            }
+            return c
+        }))
+    }
+
+    const sortCards = (a: TodolistDomainType, b: TodolistDomainType) => {
+        if(a.order > b.order) {
+            return 1
+        } else return -1
+    }
 
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
@@ -92,11 +125,18 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         </Grid>
         <Grid container spacing={3}>
             {
-                todolists.map(tl => {
+                cardList.sort(sortCards).map(tl => {
                     let allTodolistTasks = tasks[tl.id]
 
                     return <Grid item key={tl.id}>
-                        <Paper style={{padding: '10px'}}>
+                        <div
+                            draggable={true}
+                            onDragStart={(e) => dragStartHandler(e, tl)}
+                            onDragLeave={(e) => dragEndHandler(e)}
+                            onDragEnd={(e) => dragEndHandler(e)}
+                            onDragOver={(e) => dragOverHandler(e)}
+                            onDrop={(e) => dropHandler(e, tl)}
+                        >
                             <Todolist
                                 id={tl.id}
                                 title={tl.title}
@@ -112,7 +152,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
                                 changeTodolistTitle={changeTodolistTitle}
                                 demo={demo}
                             />
-                        </Paper>
+                        </div>
                     </Grid>
                 })
             }

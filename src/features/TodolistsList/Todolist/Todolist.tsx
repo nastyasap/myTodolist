@@ -3,12 +3,13 @@ import {AddItemForm} from '../../../components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../../../components/EditableSpan/EditableSpan'
 import {Task} from './Task/Task'
 import {TaskStatuses, TaskType} from '../../../api/todolists-api'
-import {FilterValuesType} from '../todolists-reducer'
+import {FilterValuesType, TodolistDomainType} from '../todolists-reducer'
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Delete} from '@mui/icons-material';
 import {RequestStatusType} from "../../../app/app-reducer";
+import { Paper } from '@mui/material'
 
 type PropsType = {
     id: string
@@ -60,33 +61,36 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         </Button>
     }
 
-    return <div style={{width: 'fit-content', textAlign: 'center'}}>
-        <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}
-                          disabled={props.entityStatus === 'loading'}/>
-            <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist}>
-                <Delete color={'primary'}/>
-            </IconButton>
-        </h3>
-        <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'} placeholder={'Title'}/>
-        <div>
-            {tasksForTodolist.length ?
-                tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
-                                                removeTask={props.removeTask}
-                                                changeTaskTitle={props.changeTaskTitle}
-                                                changeTaskStatus={props.changeTaskStatus}
-                />)
-                : <p style={{margin: '10px'}}>No tasks</p>
-            }
+
+    return (
+        <div style={{width: 'fit-content', textAlign: 'center', cursor: 'pointer'}}>
+            <Paper style={{padding: '10px'}}>
+
+                <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}
+                                  disabled={props.entityStatus === 'loading'}/>
+                    <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist}>
+                        <Delete color={'primary'}/>
+                    </IconButton>
+                </h3>
+                <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'} placeholder={'Title'}/>
+                <div>
+                    {tasksForTodolist.length ?
+                        tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
+                                                        removeTask={props.removeTask}
+                                                        changeTaskTitle={props.changeTaskTitle}
+                                                        changeTaskStatus={props.changeTaskStatus}
+                        />)
+                        : <p style={{margin: '10px'}}>No tasks</p>
+                    }
+                </div>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    {renderFilterButton('all', 'All')}
+                    {renderFilterButton('active', 'Active')}
+                    {renderFilterButton('completed', 'Completed')}
+                </div>
+            </Paper>
         </div>
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            {renderFilterButton('all', 'All')}
-            {renderFilterButton('active', 'Active')}
-            {renderFilterButton('completed', 'Completed')}
-        </div>
-    </div>
+    )
 })
-
-
-
 
 
